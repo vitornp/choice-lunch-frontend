@@ -1,0 +1,35 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "../../node_modules/element-ui/packages/theme-chalk/src/index";
+@import "../../node_modules/element-ui/packages/theme-chalk/src/reset";
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: $--color-white;
+}
+
+.el-header {
+  background-color: $--color-primary;
+  color: $--color-white;
+  font-size: $--font-size-large;
+  font-weight: $--font-weight-primary;
+  line-height: 60px;
+
+  i {
+    font-size: 20px;
+  }
+}
+
+.lunch-tools {
+  background-color: #f2f2f2;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  .lunch-tools-choice {
+    text-align: right;
+  }
+}
