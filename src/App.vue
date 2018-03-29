@@ -17,3 +17,5 @@ export default {
   name: 'App'
 }
 </script>
+
+<style lang="scss" src="./style/app.scss"></style>

@@ -49,29 +49,34 @@
       </el-dialog>
     </div>
 
-    <el-table :data="lunches" class="table" stripe border>
-      <el-table-column prop="name" label="Name"/>
+    <el-table :data="lunches" class="table" v-loading="isLoadingLunches" stripe border>
+      <el-table-column prop="name" label="Name" sortable/>
       <el-table-column prop="time" label="Time" width="200"/>
       <el-table-column prop="price" label="Price" width="200"/>
       <el-table-column label="Operations" width="160">
         <template slot-scope="scope">
-          <el-button size="mini">Edit</el-button>
-          <el-button size="mini" type="danger">Delete</el-button>
+          <el-button size="mini" @click="handleEdit(scope.row.id)">Edit</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">Delete</el-button>
         </template>
       </el-table-column>
+      <template slot="empty">No data</template>
     </el-table>
   </div>
 </template>
 
 <script>
+import http from '@/service/http'
+
 export default {
   name: 'Lunch',
   data () {
     return {
+      isLoadingLunches: true,
       isLoadingChoiceLunch: false,
       isLoadingGoLunch: false,
       visibleDialogLunchForm: false,
       visibleDialogChoiceLunch: false,
+      errors: [],
       lunch: {
         name: '',
         time: '',
@@ -88,26 +93,24 @@ export default {
           {required: true, message: 'Please select price', trigger: 'change'}
         ]
       },
-      lunches: [{
-        name: 'Lunch 1',
-        time: 'Low',
-        price: 'Low'
-      }, {
-        name: 'Lunch 2',
-        time: 'Medium',
-        price: 'High'
-      }, {
-        name: 'Lunch 3',
-        time: 'Low',
-        price: 'High'
-      }, {
-        name: 'Lunch 4',
-        time: 'Low',
-        price: 'Medium'
-      }]
+      lunches: []
     }
   },
+  async mounted () {
+    this.getLunches()
+  },
   methods: {
+    async getLunches () {
+      http.get('/lunches')
+        .then((res) => {
+          this.lunches = res.data.lunches
+          this.isLoadingLunches = false
+        })
+        .catch(e => {
+          this.errors.push(e)
+          this.isLoadingLunches = false
+        })
+    },
     submitLunchForm () {
       this.$refs['lunchForm'].validate((valid) => {
         if (valid) {
@@ -140,6 +143,12 @@ export default {
         this.isLoadingGoLunch = false
         this.visibleDialogChoiceLunch = false
       }, 2000)
+    },
+    handleEdit (id) {
+      console.log(id)
+    },
+    handleDelete (id) {
+      console.log(id)
     }
   }
 }
